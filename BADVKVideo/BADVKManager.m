@@ -30,8 +30,6 @@ static NSString * const vkAPIAccessTokenUser = @"vkAPITokenUser";
 
 @end
 
-#warning Put parsing to back thread
-
 @implementation BADVKManager
 
 + (instancetype)sharedManager {
