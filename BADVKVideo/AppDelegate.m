@@ -8,6 +8,11 @@
 
 #import "AppDelegate.h"
 
+#import "BADVideosController.h"
+
+#import "BADVKManager.h"
+#import "BADNetworker.h"
+
 @interface AppDelegate ()
 
 @end
@@ -16,7 +21,32 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    
+    // Set status bar
+    
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    
+    // Set navigation bar
+    
+    [[UINavigationBar appearance] setTintColor:[UIColor colorWithRed:131 /255.f
+                                                               green:148 /255.f
+                                                                blue:161 /255.f
+                                                               alpha:1.f]];
+    [[UINavigationBar appearance] setBarTintColor:[UIColor colorWithRed:36 /255.f
+                                                                  green:52 /255.f
+                                                                   blue:71 /255.f
+                                                                  alpha:1.f]];
+
+    // Create videos table screen
+    
+    BADVideosController *videosTableController = [[BADVideosController alloc] initWithStyle:UITableViewStylePlain];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:videosTableController];
+    
+    self.window.rootViewController = navigationController;
+    [self.window makeKeyAndVisible];
+    
     return YES;
 }
 
