@@ -19,7 +19,7 @@
 		A5F53E7D1E7C57BF008B3150 /* BADNetworker.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F53E7C1E7C57BF008B3150 /* BADNetworker.m */; };
 		A5F53E801E7D9BD8008B3150 /* BADVKManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F53E7F1E7D9BD8008B3150 /* BADVKManager.m */; };
 		A5F53E831E7DB076008B3150 /* BADAccessToken.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F53E821E7DB076008B3150 /* BADAccessToken.m */; };
-		A5F53E871E7DB460008B3150 /* BADLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F53E861E7DB460008B3150 /* BADLoginViewController.m */; };
+		A5F53E871E7DB460008B3150 /* BADAuthorizationController.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F53E861E7DB460008B3150 /* BADAuthorizationController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -49,8 +49,8 @@
 		A5F53E7F1E7D9BD8008B3150 /* BADVKManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BADVKManager.m; sourceTree = "<group>"; };
 		A5F53E811E7DB076008B3150 /* BADAccessToken.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BADAccessToken.h; sourceTree = "<group>"; };
 		A5F53E821E7DB076008B3150 /* BADAccessToken.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BADAccessToken.m; sourceTree = "<group>"; };
-		A5F53E851E7DB460008B3150 /* BADLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BADLoginViewController.h; sourceTree = "<group>"; };
-		A5F53E861E7DB460008B3150 /* BADLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BADLoginViewController.m; sourceTree = "<group>"; };
+		A5F53E851E7DB460008B3150 /* BADAuthorizationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BADAuthorizationController.h; sourceTree = "<group>"; };
+		A5F53E861E7DB460008B3150 /* BADAuthorizationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BADAuthorizationController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -176,8 +176,8 @@
 		A5F53E881E7DB944008B3150 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				A5F53E851E7DB460008B3150 /* BADLoginViewController.h */,
-				A5F53E861E7DB460008B3150 /* BADLoginViewController.m */,
+				A5F53E851E7DB460008B3150 /* BADAuthorizationController.h */,
+				A5F53E861E7DB460008B3150 /* BADAuthorizationController.m */,
 				A5F53E6A1E7C578B008B3150 /* BADVideosController.h */,
 				A5F53E6B1E7C578B008B3150 /* BADVideosController.m */,
 				A54BE42F1E8316A000B4156A /* BADVideoPlayerController.h */,
@@ -267,7 +267,7 @@
 				A554C9C01E7EBAF40061F3CB /* BADVideoCell.m in Sources */,
 				A5F53E831E7DB076008B3150 /* BADAccessToken.m in Sources */,
 				A54BE4311E8316A000B4156A /* BADVideoPlayerController.m in Sources */,
-				A5F53E871E7DB460008B3150 /* BADLoginViewController.m in Sources */,
+				A5F53E871E7DB460008B3150 /* BADAuthorizationController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

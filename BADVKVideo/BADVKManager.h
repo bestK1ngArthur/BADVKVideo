@@ -7,13 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
+
 #import "BADVideo.h"
+#import "BADAccessToken.h"
+#import "BADAuthorizationController.h"
 
 @interface BADVKManager : NSObject
 
 + (instancetype)sharedManager;
 
-- (void)authorizeUserWithCompletion:(void(^)(bool isAuthorised))completion;
+- (BOOL)isUserAuthorized;
 
 - (void)searchVideosWithQuery:(NSString *)query
                        offset:(NSInteger)offset
@@ -24,5 +27,7 @@
                 withType:(BADVideoPhotoType)photoType
                  success:(void (^)(UIImage *image))success
                  failure:(void (^)(NSError *error))failure;
+
+- (void)saveAccessToken:(BADAccessToken *)accessToken;
 
 @end

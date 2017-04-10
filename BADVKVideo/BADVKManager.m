@@ -7,11 +7,8 @@
 //
 
 #import "BADVKManager.h"
-#include "BADLoginViewController.h"
 
 #include "BADNetworker.h"
-
-#include "BADAccessToken.h"
 #include "BADKeychainWrapper.h"
 
 static NSString * const vkAPIURL = @"https://api.vk.com/method/";
@@ -48,13 +45,32 @@ static NSString * const vkAPIAccessTokenUser = @"vkAPITokenUser";
         self.networker = [BADNetworker networkerWithBaseURL:[NSURL URLWithString:vkAPIURL]];
         self.keychainWrapper = [[BADKeychainWrapper alloc] init];
         self.accessToken = [[BADAccessToken alloc] init];
+        #warning Something magic with keychain
+        //[self getAccessTokenFromKeychain];
     }
     return self;
 }
 
+#pragma mark -
+
+- (BOOL)isUserAuthorized {
+    
+    if (self.accessToken) { // if token exist
+        return self.accessToken.isValid;
+    } else {
+        return false;
+    }
+}
+
+- (void)saveAccessToken:(BADAccessToken *)accessToken {
+    
+    self.accessToken = accessToken;
+    [self saveAccessTokenToKeychain];
+}
+
 #pragma mark - Keychain
 
-- (void)saveAccessToken {
+- (void)saveAccessTokenToKeychain {
  
     if(self.accessToken) {
         
@@ -65,7 +81,7 @@ static NSString * const vkAPIAccessTokenUser = @"vkAPITokenUser";
     }
 }
 
-- (void)getAccessToken {
+- (void)getAccessTokenFromKeychain {
     
     NSString *token = [self.keychainWrapper objectForKey:(id)kSecValueData];
     
@@ -78,48 +94,6 @@ static NSString * const vkAPIAccessTokenUser = @"vkAPITokenUser";
 }
 
 #pragma mark - Requests
-
-- (void)authorizeUserWithCompletion:(void(^)(bool isAuthorised))completion {
-    
-    [self getAccessToken];
-    
-    if (self.accessToken) { // if token exist
-        if (self.accessToken.isValid) { // if token is valid
-            completion(true);
-            return;
-        } else {
-            [self presentLoginControllerWithCompletion:^(BADAccessToken * _Nonnull token) {
-                if (token) {
-                    self.accessToken = token;
-                    [self saveAccessToken];
-                    completion(true);
-                } else if (completion) {
-                    completion(false);
-                }
-            }];
-        }
-    } else {
-        [self presentLoginControllerWithCompletion:^(BADAccessToken * _Nonnull token) {
-            if (token) {
-                self.accessToken = token;
-                [self saveAccessToken];
-                completion(true);
-            } else if (completion) {
-                completion(false);
-            }
-        }];
-    }
-}
-
-- (void)presentLoginControllerWithCompletion:(void(^)(BADAccessToken *token))completion {
-    
-    BADLoginViewController *loginController = [[BADLoginViewController alloc] initWithCompletionBlock:completion];
-    
-    // Present login controller from root
-    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:loginController];
-    UIViewController *mainController = [[UIApplication sharedApplication].keyWindow rootViewController];
-    [mainController presentViewController:navigationController animated:YES completion:nil];
-}
 
 - (void)searchVideosWithQuery:(NSString *)query
                       offset:(NSInteger)offset

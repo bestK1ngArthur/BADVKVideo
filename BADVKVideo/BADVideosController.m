@@ -17,12 +17,12 @@
 
 static NSInteger videosInRequest = 40;
 
-@interface BADVideosController () <UISearchBarDelegate>
+@interface BADVideosController () <UISearchBarDelegate, BADAuthorizationDelegate>
 
 @property (strong, nonatomic) UISearchBar *searchBar;
 
 @property (strong, nonatomic) NSMutableArray *videosArray;
-@property (assign, nonatomic) BOOL isAuthorised;
+@property (assign, nonatomic) BOOL isAuthorized;
 
 @end
 
@@ -55,11 +55,23 @@ static NSInteger videosInRequest = 40;
     UIBarButtonItem *searchBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.searchBar];
     searchBarButtonItem.customView.alpha = 0.0f;
     self.navigationItem.rightBarButtonItem = searchBarButtonItem;
+    
+    [self authorizeUserIfNeeded];
+}
 
-    // Authorise user if needed
-    [[BADVKManager sharedManager] authorizeUserWithCompletion:^(bool isAuthorised) {
-        self.isAuthorised = isAuthorised;
-    }];
+- (void)authorizeUserIfNeeded {
+
+    if (!self.isAuthorized) {
+        if (![[BADVKManager sharedManager] isUserAuthorized]) { // If not authorized
+         
+            BADAuthorizationController *authController = [[BADAuthorizationController alloc] init];
+            authController.delegate = self;
+            
+            UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:authController];
+            
+            [self presentViewController:navigationController animated:true completion:nil];
+        }
+    }
 }
 
 - (void)playVideo:(BADVideo *)video {
@@ -140,8 +152,7 @@ static NSInteger videosInRequest = 40;
     return cell;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 75.f;
 }
 
@@ -163,26 +174,23 @@ static NSInteger videosInRequest = 40;
 }
 
 - (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar {
-    
     [self.tableView reloadData];
+}
+
+#pragma mark - BADAuthorisationDelegate
+
+- (void)authorizationDidFinsished:(BOOL)isAuthorized {
+    self.isAuthorized = isAuthorized;
 }
 
 #pragma mark - VKAPI
 
 - (void)searchVideosFromVK {
     
-    if (self.isAuthorised) {
-        
+    if (self.isAuthorized) {
         [self searchVideosFromVKWithQuery:self.searchBar.text];
-        
     } else {
-        
-        [[BADVKManager sharedManager] authorizeUserWithCompletion:^(bool isAuthorised) {
-            
-            self.isAuthorised = isAuthorised;
-            [self searchVideosFromVKWithQuery:self.searchBar.text];
-        }];
-        
+        [self authorizeUserIfNeeded];
     }
 }
 
