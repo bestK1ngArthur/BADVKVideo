@@ -14,6 +14,8 @@
 @property (strong, nonatomic) NSDate *expirationDate;
 @property (strong, nonatomic) NSString *userID;
 
+- (instancetype)initWithRequest:(NSURLRequest *)request;
+
 - (BOOL)isValid;
 
 @end

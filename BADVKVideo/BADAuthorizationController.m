@@ -79,33 +79,7 @@
     
     if (([[[request URL] path] isEqualToString:@"/blank.html"]) && ([[[request URL] host] isEqualToString:@"oauth.vk.com"])) {
         
-        // Parsing token
-        
-        BADAccessToken *token = [[BADAccessToken alloc] init];
-        NSString *query = [[request URL] description];
-        
-        NSArray *array = [query componentsSeparatedByString:@"#"];
-        
-        if ([array count] > 1) {
-            query = [array lastObject];
-        }
-        
-        NSArray *pairs = [query componentsSeparatedByString:@"&"];
-        for (NSString *pair in pairs) {
-            NSArray *values = [pair componentsSeparatedByString:@"="];
-            if ([values count] == 2) {
-                NSString *key = [values firstObject];
-                if ([key isEqualToString:@"access_token"]) {
-                    token.token = [values lastObject];
-                } else if ([key isEqualToString:@"expires_in"]) {
-                    NSTimeInterval interval = [[values lastObject] doubleValue];
-                    token.expirationDate = [NSDate dateWithTimeIntervalSinceNow:interval];
-                } else if ([key isEqualToString:@"user_id"]) {
-                    token.userID = [values lastObject];
-                }
-            }
-        }
-        
+        BADAccessToken *token = [[BADAccessToken alloc] initWithRequest:request];
         BOOL authorized = false;
         
         if (token.token) {
