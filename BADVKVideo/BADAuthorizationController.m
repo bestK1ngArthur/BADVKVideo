@@ -113,9 +113,9 @@
             [[BADVKManager sharedManager] saveAccessToken:token]; // Saving token to BADVKManager
         }
         
-        [self.delegate authorizationDidFinsished:authorized]; // Finishing authorisation
+        [self.delegate authorizationDidFinsished:authorized]; // Finishing authorization
         self.webView.delegate = nil;
-        [self dismissViewControllerAnimated:YES completion:nil]; // Close authoristion controller
+        [self dismissViewControllerAnimated:YES completion:nil]; // Close authorization controller
         
         return NO;
     }
