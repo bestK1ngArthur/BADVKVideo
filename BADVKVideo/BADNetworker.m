@@ -72,11 +72,8 @@
     failure:(void (^)(NSError * _Nullable error))failure {
     
     NSString *urlString = [self urlStringWithAPIMethod:apiMethod parameters:parameters];
-    NSString *webURLString = [urlString stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLHostAllowedCharacterSet];
-    
-    #warning Encode URL
-    NSURL *url = [NSURL URLWithString:webURLString]; // encodeWithCoder:];
-    NSLog(@"%@", webURLString);
+
+    NSURL *url = [NSURL URLWithString:urlString];
     [self loadRequestWithURL:url
                   method:@"GET"
                  success:^(NSData * _Nullable data, NSURLResponse * _Nullable response) {
@@ -158,7 +155,11 @@
             NSMutableString *urlString = [NSMutableString stringWithFormat:@"%@%@?", self.baseURL.absoluteString, method];
             
             for (NSString *key in parameters.allKeys) {
-                [urlString appendString:[NSString stringWithFormat:@"%@=%@", key, [parameters valueForKey:key]]];
+                
+                NSString *paramString = [NSString stringWithFormat:@"%@=%@", key, [parameters valueForKey:key]];
+                paramString = [paramString stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLHostAllowedCharacterSet];
+                [urlString appendString:paramString];
+                
                 if (![key isEqualToString:[[parameters allKeys] lastObject]]) {
                     [urlString appendString:@"&"];
                 }
