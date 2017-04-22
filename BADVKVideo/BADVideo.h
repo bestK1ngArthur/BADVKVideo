@@ -8,11 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-typedef enum {
-    BADVideoPhotoTypeSmall,
-    BADVideoPhotoTypeBig
-} BADVideoPhotoType;
-
 @interface BADVideo : NSObject
 
 @property (assign, nonatomic) NSInteger ID;
@@ -21,9 +16,7 @@ typedef enum {
 @property (strong, nonatomic) NSString *fullDescription;
 @property (assign, nonatomic) NSInteger duration;
 
-@property (strong, nonatomic) NSURL *smallPhotoURL;
-@property (strong, nonatomic) NSURL *bigPhotoURL;
-
+@property (strong, nonatomic) NSURL *photoURL;
 @property (strong, nonatomic) NSURL *URL;
 
 - (instancetype)initWithResponse:(NSDictionary *)response;

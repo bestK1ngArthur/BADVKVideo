@@ -72,9 +72,11 @@
     failure:(void (^)(NSError * _Nullable error))failure {
     
     NSString *urlString = [self urlStringWithAPIMethod:apiMethod parameters:parameters];
-    // NSString *webURLString = [urlString stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLHostAllowedCharacterSet];
+    NSString *webURLString = [urlString stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLHostAllowedCharacterSet];
     
-    NSURL *url = [NSURL URLWithString:urlString];
+    #warning Encode URL
+    NSURL *url = [NSURL URLWithString:webURLString]; // encodeWithCoder:];
+    NSLog(@"%@", webURLString);
     [self loadRequestWithURL:url
                   method:@"GET"
                  success:^(NSData * _Nullable data, NSURLResponse * _Nullable response) {
@@ -85,14 +87,22 @@
                      if ((response != nil) && (data != nil)) {
                          
                          // Parse incoming data to dictionary
+                         
                          NSError *error;
-                         NSDictionary *response = [NSJSONSerialization JSONObjectWithData:data
-                                                                                  options:NSJSONReadingMutableContainers
-                                                                                    error:&error];
+                         id parsedResponse = [NSJSONSerialization JSONObjectWithData:data
+                                                                             options:NSJSONReadingMutableContainers
+                                                                               error:&error];
+                         
+                         if ([parsedResponse isKindOfClass:[NSDictionary class]]) {
+                             success(parsedResponse);
+                         } else {
+                             error = [NSError errorWithDomain:@"com.bestK1ng.BADVKVideo"
+                                                         code:1
+                                                     userInfo:nil];
+                         }
+
                          if (error) {
                              failure(error);
-                         } else {
-                             success(response);
                          }
                      }
                  }

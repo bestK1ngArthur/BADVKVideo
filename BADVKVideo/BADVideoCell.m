@@ -12,7 +12,7 @@
 
 - (instancetype)init
 {
-    self = [super init];
+    self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"BADVideoCell"];
     if (self) {
         [self initSubiews];
     }

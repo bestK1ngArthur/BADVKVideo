@@ -17,6 +17,8 @@
 
 static NSInteger videosInRequest = 40;
 
+#warning Add progress spinner
+
 @interface BADVideosController () <UISearchBarDelegate>
 
 @property (strong, nonatomic) UISearchBar *searchBar;
@@ -52,9 +54,7 @@ static NSInteger videosInRequest = 40;
     [self.searchBar setKeyboardAppearance:UIKeyboardAppearanceDark];
     
     // Add search bar to navigation title
-    UIBarButtonItem *searchBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.searchBar];
-    searchBarButtonItem.customView.alpha = 0.0f;
-    self.navigationItem.rightBarButtonItem = searchBarButtonItem;
+    self.navigationItem.titleView = self.searchBar;
 
     // Authorise user if needed
     [[BADVKManager sharedManager] authorizeUserWithCompletion:^(bool isAuthorised) {
@@ -79,20 +79,19 @@ static NSInteger videosInRequest = 40;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    static NSString* identifier = @"Cell";
+    static NSString *identifier = @"BADVideoCell";
     BADVideoCell* cell = [tableView dequeueReusableCellWithIdentifier:identifier];
     
     if (!cell) {
         cell = [[BADVideoCell alloc] init];
     }
     
-    if (indexPath.row == [self.videosArray count] - 1) { // if last cell
+    if (indexPath.row == [self.videosArray count] - 1) { // If last cell, load new videos
         [self searchVideosFromVK];
     }
     
     // Set cell
     
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     UIView *bgColorView = [[UIView alloc] initWithFrame:cell.frame];
     bgColorView.backgroundColor = [UIColor colorWithRed:129 /255.f
                                                   green:146 /255.f
@@ -108,9 +107,9 @@ static NSInteger videosInRequest = 40;
     cell.durationLabel.text = video.durationString;
     cell.photoView.image = nil;
     
+    #warning Check uniqueness of the photo in cell
     // Start loading image for video
     [[BADVKManager sharedManager] getPhotoForVideo:video
-                                          withType:BADVideoPhotoTypeSmall
                                            success:^(UIImage * _Nullable image) {
                                                if (image) {
                                                    // Setting image on main queue
@@ -124,18 +123,8 @@ static NSInteger videosInRequest = 40;
                                            }
                                            failure:^(NSError * _Nullable error) {
                                                
-                                               // Fail to load small photo, try to load big photo
-                                               [[BADVKManager sharedManager] getPhotoForVideo:video withType:BADVideoPhotoTypeBig success:^(UIImage * _Nullable image) {
-                                                   if (image) {
-                                                       // Setting image on main queue
-                                                       dispatch_async(dispatch_get_main_queue(), ^{
-                                                           cell.photoView.image = image;
-                                                           cell.photoView.layer.cornerRadius = 5.f;
-                                                           cell.photoView.layer.masksToBounds = YES;
-                                                           [cell setNeedsLayout];
-                                                       });
-                                                   }
-                                               } failure:nil];
+                                               // Fail to load photo
+                                               
                                            }];
     return cell;
 }

@@ -132,7 +132,7 @@ static NSString * const vkAPIAccessTokenUser = @"vkAPITokenUser";
                                 @(2), @"sort", // sorted by relevance (2)
                                 @(offset), @"offset",
                                 @(count), @"count", nil];
-    
+
     [self.networker GET:@"video.search"
              parameters:[self parametersWithSettings:parameters]
                 success:^(NSDictionary * _Nullable response) {
@@ -172,21 +172,12 @@ static NSString * const vkAPIAccessTokenUser = @"vkAPITokenUser";
 }
 
 - (void)getPhotoForVideo:(BADVideo *)video
-                withType:(BADVideoPhotoType)photoType
                  success:(void (^)(UIImage *image))success
                  failure:(void (^)(NSError *error))failure {
     
-    NSURL *photoURL;
-    
-    if (photoType == BADVideoPhotoTypeSmall) {
-        photoURL = video.smallPhotoURL;
-    } else if (photoType == BADVideoPhotoTypeBig) {
-        photoURL = video.bigPhotoURL;
-    }
-    
-    if (photoURL) { // If URL exists
+    if (video.photoURL) { // If URL exists
         
-        [self.networker downloadImageWithURL:photoURL
+        [self.networker downloadImageWithURL:video.photoURL
                                      success:^(UIImage * _Nullable image) {
                                          if (success) {
                                              success(image);

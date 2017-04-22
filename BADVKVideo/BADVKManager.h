@@ -21,7 +21,6 @@
                       success:(void (^)(NSArray *videos))success
                       failure:(void (^)(NSError *error))failure;
 - (void)getPhotoForVideo:(BADVideo *)video
-                withType:(BADVideoPhotoType)photoType
                  success:(void (^)(UIImage *image))success
                  failure:(void (^)(NSError *error))failure;
 

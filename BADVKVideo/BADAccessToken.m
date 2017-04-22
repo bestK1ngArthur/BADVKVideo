@@ -12,11 +12,7 @@
 
 - (BOOL)isValid {
     
-    if ([[NSDate dateWithTimeIntervalSinceNow:0] compare:self.expirationDate] == NSOrderedAscending) {
-        return true;
-    } else {
-        return false;
-    }
+    return ([[NSDate dateWithTimeIntervalSinceNow:0] compare:self.expirationDate] == NSOrderedAscending);
 }
 
 @end

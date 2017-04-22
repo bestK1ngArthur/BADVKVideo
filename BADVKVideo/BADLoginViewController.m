@@ -18,6 +18,8 @@
 
 @implementation BADLoginViewController
 
+#warning Add progress spinner
+
 - (instancetype)initWithCompletionBlock:(void(^)(BADAccessToken *token))completionBlock {
     
     self = [super init];
@@ -41,10 +43,6 @@
     [self.view addSubview:webView];
     self.webView = webView;
     
-    UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
-                                                                          target:self
-                                                                          action:@selector(actionCancel:)];
-    [self.navigationItem setRightBarButtonItem:item animated:NO];
     self.navigationItem.title = @"Авторизация";
     
     [self.navigationController.navigationBar setTitleTextAttributes:
@@ -124,9 +122,7 @@
     return YES;
 }
 
-#pragma mark - Actions 
-
-- (void)actionCancel:(id)sender {
+- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
     
     if (self.completionBlock) {
         self.completionBlock(nil);

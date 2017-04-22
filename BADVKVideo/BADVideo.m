@@ -23,28 +23,15 @@ static NSString * const kVideoURL           = @"player";
     if (self) {
         
         // Parse from dictionary
-        
-        if ([self dictionary:response containKey:kVideoID]) {
-            self.ID = [[response objectForKey:kVideoID] integerValue];
+        self.ID = [[response objectForKey:kVideoID] integerValue];
+        self.title = [response objectForKey:kVideoTitle];
+        self.fullDescription = [response objectForKey:kVideoDescription];
+        self.duration = [[response objectForKey:kVideoDuration] integerValue];
+        self.photoURL = [NSURL URLWithString:[response objectForKey:kVideoSmallPhotoURL]];
+        if (!self.photoURL) { // If small photo isn't exist, set big photo
+            self.photoURL = [NSURL URLWithString:[response objectForKey:kVideoBigPhotoURL]];
         }
-        if ([self dictionary:response containKey:kVideoTitle]) {
-            self.title = [response objectForKey:kVideoTitle];
-        }
-        if ([self dictionary:response containKey:kVideoDescription]) {
-            self.fullDescription = [response objectForKey:kVideoDescription];
-        }
-        if ([self dictionary:response containKey:kVideoDuration]) {
-            self.duration = [[response objectForKey:kVideoDuration] integerValue];
-        }
-        if ([self dictionary:response containKey:kVideoSmallPhotoURL]) {
-            self.smallPhotoURL = [NSURL URLWithString:[response objectForKey:kVideoSmallPhotoURL]];
-        }
-        if ([self dictionary:response containKey:kVideoBigPhotoURL]) {
-            self.smallPhotoURL = [NSURL URLWithString:[response objectForKey:kVideoBigPhotoURL]];
-        }
-        if ([self dictionary:response containKey:kVideoURL]) {
-            self.URL = [NSURL URLWithString:[response objectForKey:kVideoURL]];
-        }
+        self.URL = [NSURL URLWithString:[response objectForKey:kVideoURL]];
     }
     return self;
 }
