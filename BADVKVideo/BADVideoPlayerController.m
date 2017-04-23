@@ -13,7 +13,10 @@
 @interface BADVideoPlayerController () <UIWebViewDelegate>
 
 @property (strong, nonnull) BADVideo *video;
+
 @property (weak, nonatomic) UIWebView *webView;
+@property (weak, nonatomic) UIActivityIndicatorView *activityIndicator;
+
 
 @end
 
@@ -49,6 +52,23 @@
     
     self.navigationItem.title = self.video.title;
     
+    // Add activity indicator
+    
+    CGFloat side = 50.f;
+    CGFloat centerX = (self.view.frame.size.width - side) / 2;
+    CGFloat centerY = (self.view.frame.size.height - side) / 2;
+    
+    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(centerX, centerY, side, side)];
+    activityIndicator.color = [UIColor colorWithRed:27 /255.f
+                                              green:40 /255.f
+                                               blue:54 /255.f
+                                              alpha:1.0f];
+    [self.view addSubview:activityIndicator];
+    [self.view bringSubviewToFront:activityIndicator];
+    self.activityIndicator = activityIndicator;
+    
+    [self.activityIndicator startAnimating];
+    
     // Make video request
     
     NSURLRequest *request = [NSURLRequest requestWithURL:self.video.URL];
@@ -56,6 +76,22 @@
     webView.delegate = self;
     [webView loadRequest:request];
 }
+
+#pragma mark - UIWebViewDelegate
+
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
+    
+    [self.activityIndicator startAnimating];
+    
+    return YES;
+}
+
+- (void)webViewDidFinishLoad:(UIWebView *)webView {
+    
+    [self.activityIndicator stopAnimating];
+}
+
+#pragma mark - Memory
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

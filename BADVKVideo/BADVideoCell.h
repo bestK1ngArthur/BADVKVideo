@@ -14,4 +14,6 @@
 @property (strong, nonatomic) UILabel *durationLabel;
 @property (strong, nonatomic) UIImageView *photoView;
 
+- (instancetype)initWithReuseIdentifier:(NSString *)reuseIdentifier;
+
 @end

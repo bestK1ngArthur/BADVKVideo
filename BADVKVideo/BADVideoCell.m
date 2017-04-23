@@ -10,9 +10,9 @@
 
 @implementation BADVideoCell
 
-- (instancetype)init
-{
-    self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"BADVideoCell"];
+- (instancetype)initWithReuseIdentifier:(NSString *)reuseIdentifier {
+    
+    self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
     if (self) {
         [self initSubiews];
     }
@@ -74,7 +74,7 @@
     
     // Horizontal constraints
     NSArray *horizontalConstraints =[NSLayoutConstraint
-                                    constraintsWithVisualFormat:@"H:|-padding-[photoView(==87)]-padding2-[titleLabel]-padding-[durationLabel(>=10)]-7-|"
+                                    constraintsWithVisualFormat:@"H:|-padding-[photoView(==87)]-padding2-[titleLabel]-padding-[durationLabel(>=40)]-7-|"
                                     options:0 metrics:metrics views:views];
     
     [self addConstraints:photoViewVerticalConstraints];

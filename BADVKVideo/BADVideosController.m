@@ -12,16 +12,12 @@
 #import "BADVideoCell.h"
 #import "BADVideoPlayerController.h"
 
-#import <AVKit/AVKit.h>
-#import <AVFoundation/AVFoundation.h>
-
 static NSInteger videosInRequest = 40;
-
-#warning Add progress spinner
 
 @interface BADVideosController () <UISearchBarDelegate>
 
 @property (strong, nonatomic) UISearchBar *searchBar;
+@property (weak, nonatomic) UIActivityIndicatorView *activityIndicator;
 
 @property (strong, nonatomic) NSMutableArray *videosArray;
 @property (assign, nonatomic) BOOL isAuthorised;
@@ -36,6 +32,7 @@ static NSInteger videosInRequest = 40;
     self.videosArray = [NSMutableArray array];
     
     // Setup tableview
+    
     [self.tableView setSeparatorColor:[UIColor colorWithRed:11 /255.f
                                                       green:17 /255.f
                                                        blue:23 /255.f
@@ -47,16 +44,34 @@ static NSInteger videosInRequest = 40;
                                                      alpha:1.0f];
     self.tableView.tableFooterView = [[UIView alloc] init];
     
+    // Add activity indicator
+    
+    CGFloat side = 50.f;
+    CGFloat centerX = (self.view.frame.size.width - side) / 2;
+    CGFloat centerY = (self.view.frame.size.height - side) / 2;
+    
+    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(centerX, centerY, side, side)];
+    activityIndicator.color = [UIColor colorWithRed:227 /255.f
+                                              green:228 /255.f
+                                               blue:329 /255.f
+                                              alpha:1.f];
+    [self.view addSubview:activityIndicator];
+    [self.view bringSubviewToFront:activityIndicator];
+    self.activityIndicator = activityIndicator;
+    
     // Setup search bar
+    
     self.searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, -44, self.view.bounds.size.width - 34, 44)];
     self.searchBar.placeholder = @"Всеобщий поиск";
     self.searchBar.delegate = self;
     [self.searchBar setKeyboardAppearance:UIKeyboardAppearanceDark];
     
     // Add search bar to navigation title
+    
     self.navigationItem.titleView = self.searchBar;
 
     // Authorise user if needed
+    
     [[BADVKManager sharedManager] authorizeUserWithCompletion:^(bool isAuthorised) {
         self.isAuthorised = isAuthorised;
     }];
@@ -80,10 +95,10 @@ static NSInteger videosInRequest = 40;
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     static NSString *identifier = @"BADVideoCell";
-    BADVideoCell* cell = [tableView dequeueReusableCellWithIdentifier:identifier];
+    BADVideoCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
     
     if (!cell) {
-        cell = [[BADVideoCell alloc] init];
+        cell = [[BADVideoCell alloc] initWithReuseIdentifier:@"BADVideoCell"];
     }
     
     if (indexPath.row == [self.videosArray count] - 1) { // If last cell, load new videos
@@ -107,8 +122,8 @@ static NSInteger videosInRequest = 40;
     cell.durationLabel.text = video.durationString;
     cell.photoView.image = nil;
     
-    #warning Check uniqueness of the photo in cell
     // Start loading image for video
+    
     [[BADVKManager sharedManager] getPhotoForVideo:video
                                            success:^(UIImage * _Nullable image) {
                                                if (image) {
@@ -149,6 +164,7 @@ static NSInteger videosInRequest = 40;
     [self.videosArray removeAllObjects];
     [self.searchBar resignFirstResponder];
     [self searchVideosFromVK];
+    [self.activityIndicator startAnimating];
 }
 
 - (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar {
@@ -183,6 +199,7 @@ static NSInteger videosInRequest = 40;
                                                 success:^(NSArray * _Nullable videos) {
                                                     
                                                     // Success
+                                                    
                                                     [self.videosArray addObjectsFromArray:videos];
                                                     
                                                     NSMutableArray* newPaths = [NSMutableArray array];
@@ -192,6 +209,9 @@ static NSInteger videosInRequest = 40;
                                                     
                                                     // Update tableview on main queue
                                                     dispatch_async(dispatch_get_main_queue(), ^{
+                                                        
+                                                        [self.activityIndicator stopAnimating];
+                                                        
                                                         [self.tableView beginUpdates];
                                                         [self.tableView insertRowsAtIndexPaths:newPaths withRowAnimation:UITableViewRowAnimationTop];
                                                         [self.tableView endUpdates];
