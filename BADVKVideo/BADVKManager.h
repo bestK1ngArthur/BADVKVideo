@@ -13,7 +13,7 @@
 
 + (instancetype)sharedManager;
 
-- (void)authorizeUserWithCompletion:(void(^)(bool isAuthorised))completion;
+- (void)authorizeUserWithCompletion:(void(^)(BOOL isAuthorised))completion;
 
 - (void)searchVideosWithQuery:(NSString *)query
                        offset:(NSInteger)offset

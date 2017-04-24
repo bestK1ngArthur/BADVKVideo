@@ -79,22 +79,22 @@ static NSString * const vkAPIAccessTokenUser = @"vkAPITokenUser";
 
 #pragma mark - Requests
 
-- (void)authorizeUserWithCompletion:(void(^)(bool isAuthorised))completion {
+- (void)authorizeUserWithCompletion:(void(^)(BOOL isAuthorised))completion {
     
     [self getAccessToken];
     
     if (self.accessToken) { // if token exist
         if (self.accessToken.isValid) { // if token is valid
-            completion(true);
+            completion(YES);
             return;
         } else {
             [self presentLoginControllerWithCompletion:^(BADAccessToken * _Nonnull token) {
                 if (token) {
                     self.accessToken = token;
                     [self saveAccessToken];
-                    completion(true);
+                    completion(YES);
                 } else if (completion) {
-                    completion(false);
+                    completion(NO);
                 }
             }];
         }
@@ -103,9 +103,9 @@ static NSString * const vkAPIAccessTokenUser = @"vkAPITokenUser";
             if (token) {
                 self.accessToken = token;
                 [self saveAccessToken];
-                completion(true);
+                completion(YES);
             } else if (completion) {
-                completion(false);
+                completion(NO);
             }
         }];
     }

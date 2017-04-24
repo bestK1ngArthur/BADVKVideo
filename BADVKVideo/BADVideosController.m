@@ -16,7 +16,7 @@ static NSInteger videosInRequest = 40;
 
 @interface BADVideosController () <UISearchBarDelegate>
 
-@property (strong, nonatomic) UISearchBar *searchBar;
+@property (weak, nonatomic) UISearchBar *searchBar;
 @property (weak, nonatomic) UIActivityIndicatorView *activityIndicator;
 
 @property (strong, nonatomic) NSMutableArray *videosArray;
@@ -61,10 +61,12 @@ static NSInteger videosInRequest = 40;
     
     // Setup search bar
     
-    self.searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, -44, self.view.bounds.size.width - 34, 44)];
-    self.searchBar.placeholder = @"Всеобщий поиск";
-    self.searchBar.delegate = self;
-    [self.searchBar setKeyboardAppearance:UIKeyboardAppearanceDark];
+    UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, -44, self.view.bounds.size.width - 34, 44)];
+    searchBar.placeholder = @"Всеобщий поиск";
+    searchBar.delegate = self;
+    [searchBar setKeyboardAppearance:UIKeyboardAppearanceDark];
+    
+    self.searchBar = searchBar;
     
     // Add search bar to navigation title
     
@@ -72,7 +74,7 @@ static NSInteger videosInRequest = 40;
 
     // Authorise user if needed
     
-    [[BADVKManager sharedManager] authorizeUserWithCompletion:^(bool isAuthorised) {
+    [[BADVKManager sharedManager] authorizeUserWithCompletion:^(BOOL isAuthorised) {
         self.isAuthorised = isAuthorised;
     }];
 }
@@ -80,7 +82,7 @@ static NSInteger videosInRequest = 40;
 - (void)playVideo:(BADVideo *)video {
     
     BADVideoPlayerController *player = [[BADVideoPlayerController alloc] initWithVideo:video];
-    [self.navigationController pushViewController:player animated:true];
+    [self.navigationController pushViewController:player animated:YES];
     
     [self.searchBar resignFirstResponder];
 }
@@ -167,6 +169,12 @@ static NSInteger videosInRequest = 40;
     [self.activityIndicator startAnimating];
 }
 
+- (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar {
+    
+    return YES;
+}
+
+
 - (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar {
     
     [self.tableView reloadData];
@@ -182,7 +190,7 @@ static NSInteger videosInRequest = 40;
         
     } else {
         
-        [[BADVKManager sharedManager] authorizeUserWithCompletion:^(bool isAuthorised) {
+        [[BADVKManager sharedManager] authorizeUserWithCompletion:^(BOOL isAuthorised) {
             
             self.isAuthorised = isAuthorised;
             [self searchVideosFromVKWithQuery:self.searchBar.text];
