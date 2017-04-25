@@ -108,15 +108,6 @@ static NSInteger videosInRequest = 40;
         [self searchVideosFromVK];
     }
     
-    // Set cell
-    
-    UIView *bgColorView = [[UIView alloc] initWithFrame:cell.frame];
-    bgColorView.backgroundColor = [UIColor colorWithRed:129 /255.f
-                                                  green:146 /255.f
-                                                   blue:159 /255.f
-                                                  alpha:1.f];
-    [cell setSelectedBackgroundView:bgColorView];
-    
     // Set video information
     
     BADVideo *video = [self.videosArray objectAtIndex:indexPath.row];

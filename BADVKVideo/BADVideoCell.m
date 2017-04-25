@@ -33,6 +33,10 @@
     
     // Setting colors
 
+    self.backgroundColor = [UIColor colorWithRed:20 /255.f
+                                           green:29 /255.f
+                                            blue:38 /255.f
+                                           alpha:1.f];
     self.contentView.backgroundColor = [UIColor colorWithRed:20 /255.f
                                                        green:29 /255.f
                                                         blue:38 /255.f
@@ -48,6 +52,15 @@
                                                 green:228 /255.f
                                                  blue:329 /255.f
                                                 alpha:1.f]];
+    
+    UIView *bgColorView = [[UIView alloc] initWithFrame:self.frame];
+    bgColorView.backgroundColor = [UIColor colorWithRed:129 /255.f
+                                                  green:146 /255.f
+                                                   blue:159 /255.f
+                                                  alpha:1.f];
+    [self setSelectedBackgroundView:bgColorView];
+    
+    // Circle corners 
     
     photoView.layer.cornerRadius = 5.f;
     photoView.layer.masksToBounds = YES;
