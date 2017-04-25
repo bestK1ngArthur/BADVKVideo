@@ -65,6 +65,7 @@ static NSInteger videosInRequest = 40;
     searchBar.placeholder = @"Всеобщий поиск";
     searchBar.delegate = self;
     [searchBar setKeyboardAppearance:UIKeyboardAppearanceDark];
+    searchBar.barStyle = UISearchBarStyleMinimal;
     
     self.searchBar = searchBar;
     
@@ -174,6 +175,14 @@ static NSInteger videosInRequest = 40;
     return YES;
 }
 
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
+    
+    if ([searchText length] == 0) { // If button 'clear' pressed
+        
+        [self.videosArray removeAllObjects];
+        [self.tableView reloadData];
+    }
+}
 
 - (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar {
     
